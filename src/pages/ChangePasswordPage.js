@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import Header from '../components/Header';
-import './ChangePasswordPage.css';
 
 const ChangePasswordPage = () => {
   const [login, setLogin] = useState('');
@@ -32,41 +31,43 @@ const ChangePasswordPage = () => {
   return (
     <div>
       <Header />
-      <main>
-        <form onSubmit={handleChangePassword}>
-          <label htmlFor="login">Login (Email):</label>
-          <input
-            type="email"
-            id="login"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-            required
-          />
-          <label htmlFor="password">Nova Senha:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <label htmlFor="confirmPassword">Confirmação de Senha:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          <p>
-            A senha deve ter pelo menos 6 caracteres, incluindo um número, uma
-            letra maiúscula e um caractere especial: @ # $ % & * ! ? / \\ | - _ + .
-            =
-          </p>
-          <button type="submit">Trocar Senha</button>
-          <button type="button" onClick={() => document.getElementById('changePasswordForm').reset()}>Limpar</button>
-        </form>
-      </main>
+      <div className="wrapper">
+        <main>
+          <form onSubmit={handleChangePassword}>
+            <label htmlFor="login">Login (Email):</label>
+            <input
+              type="email"
+              id="login"
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+              required
+            />
+            <label htmlFor="password">Nova Senha:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <label htmlFor="confirmPassword">Confirmação de Senha:</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <p>
+              A senha deve ter pelo menos 6 caracteres, incluindo um número, uma
+              letra maiúscula e um caractere especial: @ # $ % & * ! ? / \\ | - _ + .
+              =
+            </p>
+            <button type="submit">Trocar Senha</button>
+            <button type="button" onClick={() => document.getElementById('changePasswordForm').reset()}>Limpar</button>
+          </form>
+        </main>
+      </div>
     </div>
   );
 };
