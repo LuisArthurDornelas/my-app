@@ -1,0 +1,53 @@
+main {
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .gallery {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .gallery img {
+    max-width: 100px;
+    border-radius: 8px;
+    transition: transform 0.3s;
+  }
+  
+  .gallery img:hover {
+    transform: scale(1.1);
+  }
+  

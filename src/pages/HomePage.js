@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../components/Header';
+import './HomePage.css';
 
 const HomePage = () => (
   <div>
@@ -61,32 +62,34 @@ const HomePage = () => (
       </section>
       <section>
         <h2>Fundadores</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Cargo</th>
-              <th>Nome</th>
-              <th>Breve CV</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>CEO</td>
-              <td>Nome 1</td>
-              <td>Breve CV 1</td>
-            </tr>
-            <tr>
-              <td>CTO</td>
-              <td>Nome 2</td>
-              <td>Breve CV 2</td>
-            </tr>
-            <tr>
-              <td>COO</td>
-              <td>Nome 3</td>
-              <td>Breve CV 3</td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Cargo</th>
+                <th>Nome</th>
+                <th>Breve CV</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CEO</td>
+                <td>Nome 1</td>
+                <td>Breve CV 1</td>
+              </tr>
+              <tr>
+                <td>CTO</td>
+                <td>Nome 2</td>
+                <td>Breve CV 2</td>
+              </tr>
+              <tr>
+                <td>COO</td>
+                <td>Nome 3</td>
+                <td>Breve CV 3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   </div>

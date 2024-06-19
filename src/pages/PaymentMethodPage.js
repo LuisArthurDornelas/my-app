@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import Header from '../components/Header';
+import './PaymentMethodPage.css';
 
 const PaymentMethodPage = () => {
   const [code, setCode] = useState('');
@@ -37,13 +38,36 @@ const PaymentMethodPage = () => {
       <main>
         <form onSubmit={handlePaymentMethod}>
           <label htmlFor="code">Sigla:</label>
-          <input type="text" id="code" value={code} onChange={(e) => setCode(e.target.value)} required />
+          <input
+            type="text"
+            id="code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+          />
           <label htmlFor="name">Nome:</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <label htmlFor="maxValue">Valor Máximo:</label>
-          <input type="number" id="maxValue" value={maxValue} onChange={(e) => setMaxValue(e.target.value)} required />
+          <input
+            type="number"
+            id="maxValue"
+            value={maxValue}
+            onChange={(e) => setMaxValue(e.target.value)}
+            required
+          />
           <label htmlFor="isElectronic">Meio Eletrônico:</label>
-          <input type="checkbox" id="isElectronic" checked={isElectronic} onChange={(e) => setIsElectronic(e.target.checked)} />
+          <input
+            type="checkbox"
+            id="isElectronic"
+            checked={isElectronic}
+            onChange={(e) => setIsElectronic(e.target.checked)}
+          />
           <button type="submit">Cadastrar Meio de Pagamento</button>
         </form>
       </main>

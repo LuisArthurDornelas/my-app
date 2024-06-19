@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import Header from '../components/Header';
+import './ServiceRequestPage.css';
 
 const ServiceRequestPage = () => {
   const [services, setServices] = useState([]);
@@ -34,7 +35,6 @@ const ServiceRequestPage = () => {
   };
 
   const handleDeleteRequest = (index) => {
-    // Logic to handle deleting a request
     setRequests(requests.filter((_, i) => i !== index));
   };
 
