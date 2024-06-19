@@ -36,6 +36,7 @@ const RegisterPage = () => {
         alert('Erro no cadastro');
       }
     } catch (error) {
+      console.error('Error registering client:', error);
       alert('Erro ao tentar cadastrar');
     }
   };
