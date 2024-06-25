@@ -1,79 +1,56 @@
 import React, { useState } from 'react';
-import api from '../services/api';
-import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa'; // Importação do ícone FaHome
+import ServiceForm from './ServiceForm';
+import './PaymentMethodPage.css';
 
-const PaymentMethodPage = () => {
-  const [code, setCode] = useState('');
-  const [name, setName] = useState('');
-  const [maxValue, setMaxValue] = useState('');
-  const [isElectronic, setIsElectronic] = useState(false);
+function AddService() {
+    const [nome, setNome] = useState('');
+    const [preco, setPreco] = useState('');
+    const [prazo, setPrazo] = useState('');
+    const navigate = useNavigate();
 
-  const handlePaymentMethod = async (e) => {
-    e.preventDefault();
-    if (maxValue <= 0) {
-      alert('O valor máximo deve ser maior que zero');
-      return;
-    }
-    try {
-      const response = await api.post('/payment-methods', {
-        code,
-        name,
-        maxValue,
-        isElectronic
-      });
-      if (response.data.status === 'success') {
-        alert('Meio de pagamento cadastrado com sucesso');
-      } else {
-        alert('Erro no cadastro do meio de pagamento');
-      }
-    } catch (error) {
-      alert('Erro ao tentar cadastrar meio de pagamento');
-    }
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!nome || !preco || !prazo) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
 
-  return (
-    <div>
-      <Header />
-      <div className="wrapper">
-        <main>
-          <form onSubmit={handlePaymentMethod}>
-            <label htmlFor="code">Sigla:</label>
-            <input
-              type="text"
-              id="code"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              required
-            />
-            <label htmlFor="name">Nome:</label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <label htmlFor="maxValue">Valor Máximo:</label>
-            <input
-              type="number"
-              id="maxValue"
-              value={maxValue}
-              onChange={(e) => setMaxValue(e.target.value)}
-              required
-            />
-            <label htmlFor="isElectronic">Meio Eletrônico:</label>
-            <input
-              type="checkbox"
-              id="isElectronic"
-              checked={isElectronic}
-              onChange={(e) => setIsElectronic(e.target.checked)}
-            />
-            <button type="submit">Cadastrar Meio de Pagamento</button>
-          </form>
-        </main>
-      </div>
-    </div>
-  );
-};
+        const novoServico = { nome, preco: parseFloat(preco), prazo: parseInt(prazo, 10) };
+        console.log('Serviço adicionado:', novoServico);
+        // Aqui você pode fazer uma requisição POST para salvar o novo serviço
 
-export default PaymentMethodPage;
+        // Resetar o formulário
+        setNome('');
+        setPreco('');
+        setPrazo('');
+
+        // Navegar de volta para a página de solicitação ou outra página
+        navigate('/solicitacao');
+    };
+
+    return (
+        <div className="add-service-container">
+            <header className="add-service-header">
+                <h1>Adicionar Serviço de TI</h1>
+                <button className="home-button" onClick={() => navigate('/')}>
+                    <FaHome />
+                </button>
+            </header>
+            <main className="add-service-main">
+                <ServiceForm
+                    nome={nome}
+                    preco={preco}
+                    prazo={prazo}
+                    setNome={setNome}
+                    setPreco={setPreco}
+                    setPrazo={setPrazo}
+                    handleSubmit={handleSubmit}
+                />
+            </main>
+        </div>
+    );
+}
+
+export default AddService;

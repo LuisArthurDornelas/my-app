@@ -1,0 +1,18 @@
+.service-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-form label {
+    margin-top: 10px;
+}
+
+.service-form input {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.service-form button {
+    margin-top: 10px;
+    padding: 10px;
+}
