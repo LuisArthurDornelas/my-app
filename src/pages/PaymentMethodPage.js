@@ -27,7 +27,7 @@ function AddService() {
         setPrazo('');
 
         // Navegar de volta para a página de solicitação ou outra página
-        navigate('/solicitacao');
+        navigate('/service-request');
     };
 
     return (
