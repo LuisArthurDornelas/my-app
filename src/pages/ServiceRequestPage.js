@@ -7,11 +7,7 @@ import './ServiceRequestPage.css';
 function Solicitacao() {
     const [servicos, setServicos] = useState([]);
     const [solicitacoes, setSolicitacoes] = useState([]);
-    const meiosDePagamento = [
-        { nome: 'Cartão de Crédito', valorMaximo: 2000 },
-        { nome: 'Boleto Bancário', valorMaximo: 1000 },
-        { nome: 'Pix', valorMaximo: 1500 }
-    ];
+    const [meiosDePagamento, setMeiosDePagamento] = useState([]);
     const [servicoSelecionado, setServicoSelecionado] = useState('');
     const [preco, setPreco] = useState('');
     const [prazo, setPrazo] = useState('');
@@ -48,8 +44,25 @@ function Solicitacao() {
             }
         };
 
+        const fetchMeiosDePagamento = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/payment-methods');
+                console.log('Response from payment methods endpoint:', response.data); // Log the data
+                if (Array.isArray(response.data)) {
+                    setMeiosDePagamento(response.data);
+                } else {
+                    console.error('Response is not an array:', response.data);
+                    setMeiosDePagamento([]);
+                }
+            } catch (error) {
+                console.error('Error fetching payment methods:', error);
+                setMeiosDePagamento([]);
+            }
+        };
+
         fetchServicos();
         fetchSolicitacoes();
+        fetchMeiosDePagamento();
     }, []);
 
     useEffect(() => {
@@ -71,7 +84,7 @@ function Solicitacao() {
         };
 
         atualizarValores();
-    }, [servicoSelecionado, servicos]);
+    }, [servicoSelecionado, servicos, meiosDePagamento]);
 
     const calcularDataPrevista = (prazo) => {
         const dataAtual = new Date();
@@ -86,7 +99,7 @@ function Solicitacao() {
             dataPedido: new Date().toISOString().split('T')[0],
             status: 'Em Elaboração',
             dataPrevista: dataPrevista,
-            meioPagamentoSigla: meiosDePagamento.find(meio => meio.nome === meioPagamentoSelecionado).nome
+            meioPagamentoSigla: meioPagamentoSelecionado
         };
 
         try {
@@ -158,8 +171,8 @@ function Solicitacao() {
                     <label htmlFor="meio-pagamento">Meio de Pagamento:</label>
                     <select id="meio-pagamento" value={meioPagamentoSelecionado} onChange={e => setMeioPagamentoSelecionado(e.target.value)}>
                         <option value="">Selecione um meio de pagamento</option>
-                        {meiosPagamentoHabilitados.map(meio => (
-                            <option key={meio.nome} value={meio.nome}>{meio.nome}</option>
+                        {meiosDePagamento.map(meio => (
+                            <option key={meio.id} value={meio.nome}>{meio.nome}</option>
                         ))}
                     </select>
                     <p>Status: Em Elaboração</p>
