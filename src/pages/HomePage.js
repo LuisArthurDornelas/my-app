@@ -23,15 +23,18 @@ function Home() {
                 <section>
                     <h2>Sobre Nós</h2>
                     <p>A Empresa de TI foi fundada em 2024 com a missão de fornecer soluções tecnológicas inovadoras...</p>
+                    <div class="video-container">
                     <iframe
                         width="560"
                         height="315"
-                        src="https://www.youtube.com/embed/video_id"
+                        src="https://www.youtube.com/embed/M5P-W_wyN7s?autoplay=1"
                         frameBorder="0"
                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         title="Vídeo Institucional da Empresa"
                     ></iframe>
+                    </div>
+
                     <div className="gallery">
                         <img src="/foto1.jpg" alt="Instalação 1" />
                         <img src="/foto2.jpg" alt="Instalação 2" />
