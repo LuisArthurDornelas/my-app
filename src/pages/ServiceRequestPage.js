@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
+import axios from 'axios';
 import './ServiceRequestPage.css';
 
 function Solicitacao() {
-    const [servicos] = useState([
-        { nome: 'Desenvolvimento de Software', preco: 1500, prazo: 30 },
-        { nome: 'Manutenção de Sistemas', preco: 800, prazo: 15 },
-        { nome: 'Consultoria em TI', preco: 1200, prazo: 20 }
-    ]);
-    const [solicitacoes, setSolicitacoes] = useState([
-        { dataPedido: '2024-06-01', numero: 1, servico: 'Desenvolvimento de Software', status: 'EM ELABORAÇÃO', preco: 1500, prazo: 30, dataPrevista: '2024-07-01', meioPagamento: 'Cartão de Crédito' },
-        { dataPedido: '2024-06-05', numero: 2, servico: 'Manutenção de Sistemas', status: 'EM ELABORAÇÃO', preco: 800, prazo: 15, dataPrevista: '2024-06-20', meioPagamento: 'Boleto Bancário' }
-    ]);
+    const [servicos, setServicos] = useState([]);
+    const [solicitacoes, setSolicitacoes] = useState([]);
     const meiosDePagamento = [
         { nome: 'Cartão de Crédito', valorMaximo: 2000 },
         { nome: 'Boleto Bancário', valorMaximo: 1000 },
@@ -25,7 +19,39 @@ function Solicitacao() {
     const [meiosPagamentoHabilitados, setMeiosPagamentoHabilitados] = useState([]);
     const [meioPagamentoSelecionado, setMeioPagamentoSelecionado] = useState('');
     const navigate = useNavigate();
-    
+
+    useEffect(() => {
+        const fetchServicos = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/service-requests/services');
+                console.log('Response from services endpoint:', response.data); // Log the data
+                if (Array.isArray(response.data)) {
+                    setServicos(response.data);
+                } else {
+                    console.error('Response is not an array:', response.data);
+                    setServicos([]);
+                }
+            } catch (error) {
+                console.error('Error fetching services:', error);
+                setServicos([]);
+            }
+        };
+
+        const fetchSolicitacoes = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/service-requests');
+                console.log('Response from requests endpoint:', response.data); // Log the data
+                setSolicitacoes(Array.isArray(response.data) ? response.data : []);
+            } catch (error) {
+                console.error('Error fetching requests:', error);
+                setSolicitacoes([]);
+            }
+        };
+
+        fetchServicos();
+        fetchSolicitacoes();
+    }, []);
+
     useEffect(() => {
         const atualizarValores = () => {
             const servico = servicos.find(s => s.nome === servicoSelecionado);
@@ -33,7 +59,7 @@ function Solicitacao() {
                 setPreco(servico.preco);
                 setPrazo(servico.prazo);
                 setDataPrevista(calcularDataPrevista(servico.prazo));
-    
+
                 const meiosHabilitados = meiosDePagamento.filter(meio => meio.valorMaximo >= servico.preco);
                 setMeiosPagamentoHabilitados(meiosHabilitados);
             } else {
@@ -43,9 +69,9 @@ function Solicitacao() {
                 setMeiosPagamentoHabilitados([]);
             }
         };
-    
+
         atualizarValores();
-    }, [servicoSelecionado, servicos]);    
+    }, [servicoSelecionado, servicos]);
 
     const calcularDataPrevista = (prazo) => {
         const dataAtual = new Date();
@@ -53,30 +79,50 @@ function Solicitacao() {
         return dataAtual.toISOString().split('T')[0];
     };
 
-    const handleSolicitacao = () => {
+    const handleSolicitacao = async () => {
         const novaSolicitacao = {
+            clienteId: 1, // Substitua pelo ID do cliente real
+            servicoId: servicos.find(servico => servico.nome === servicoSelecionado).id,
             dataPedido: new Date().toISOString().split('T')[0],
-            numero: solicitacoes.length + 1,
-            servico: servicoSelecionado,
-            status: 'EM ELABORAÇÃO',
-            preco: preco,
-            prazo: prazo,
+            status: 'Em Elaboração',
             dataPrevista: dataPrevista,
-            meioPagamento: meioPagamentoSelecionado
+            meioPagamentoSigla: meiosDePagamento.find(meio => meio.nome === meioPagamentoSelecionado).nome
         };
-    
-        setSolicitacoes([...solicitacoes, novaSolicitacao]);
-        setServicoSelecionado('');
-        setMeioPagamentoSelecionado('');
-    };    
 
-    const handleExcluir = (index) => {
-        setSolicitacoes(solicitacoes.filter((_, i) => i !== index));
+        try {
+            const response = await axios.post('http://localhost:3001/api/service-requests', novaSolicitacao);
+            if (response.data.status === 'success') {
+                setSolicitacoes([...solicitacoes, novaSolicitacao]);
+                setServicoSelecionado('');
+                setMeioPagamentoSelecionado('');
+                alert('Solicitação criada com sucesso!');
+            } else {
+                alert('Erro ao criar solicitação.');
+            }
+        } catch (error) {
+            console.error('Error creating request:', error);
+            alert('Erro ao criar solicitação.');
+        }
+    };
+
+    const handleExcluir = async (id) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/api/service-requests/${id}`);
+            if (response.data.status === 'success') {
+                setSolicitacoes(solicitacoes.filter(solicitacao => solicitacao.id !== id));
+                alert('Solicitação excluída com sucesso!');
+            } else {
+                alert('Erro ao excluir solicitação.');
+            }
+        } catch (error) {
+            console.error('Error deleting request:', error);
+            alert('Erro ao excluir solicitação.');
+        }
     };
 
     return (
         <div className="solicitacao-container">
-<header>
+            <header>
                 <img src="/logo.png" alt="Logo da Empresa" />
                 <h1>Bem-vindo à Empresa de TI</h1>
                 <nav>
@@ -103,7 +149,7 @@ function Solicitacao() {
                     <select id="servico" value={servicoSelecionado} onChange={e => setServicoSelecionado(e.target.value)}>
                         <option value="">Selecione um serviço</option>
                         {servicos.map(servico => (
-                            <option key={servico.nome} value={servico.nome}>{servico.nome}</option>
+                            <option key={servico.id} value={servico.nome}>{servico.nome}</option>
                         ))}
                     </select>
                     <p>Preço: {preco}</p>
@@ -116,7 +162,7 @@ function Solicitacao() {
                             <option key={meio.nome} value={meio.nome}>{meio.nome}</option>
                         ))}
                     </select>
-                    <p>Status: EM ELABORAÇÃO</p>
+                    <p>Status: Em Elaboração</p>
                     <button onClick={handleSolicitacao} disabled={!servicoSelecionado || !meioPagamentoSelecionado}>Solicitar</button>
                 </section>
                 <section className="solicitacoes-feitas">
@@ -145,9 +191,9 @@ function Solicitacao() {
                                     <td>{solicitacao.preco}</td>
                                     <td>{solicitacao.prazo}</td>
                                     <td>{solicitacao.dataPrevista}</td>
-                                    <td>{solicitacao.meioPagamento}</td>
+                                    <td>{solicitacao.meioPagamentoSigla}</td>
                                     <td>
-                                        <button onClick={() => handleExcluir(index)}>Excluir</button>
+                                        <button onClick={() => handleExcluir(solicitacao.id)}>Excluir</button>
                                     </td>
                                 </tr>
                             ))}
