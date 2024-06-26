@@ -44,22 +44,20 @@ function Login() {
                     <FaHome />
                 </button>
             </header>
-            <main className="login-main">
-                <form className="login-form">
-                    <label htmlFor="email">Login:</label>
-                    <input type="text" id="email" name="email" value={email} onChange={e => setEmail(e.target.value)} required />
-                    <label htmlFor="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" value={senha} onChange={e => setSenha(e.target.value)} required />
-                    <div className="login-buttons">
-                        <button type="button" onClick={handleLogin}>Realizar Login</button>
-                        <button type="button" onClick={handleClear}>Limpar</button>
-                    </div>
-                    <div className="login-links">
-                        <a href="/change-password">Trocar Senha</a>
-                        <a href="/register">Cadastrar Cliente</a>
-                    </div>
-                </form>
-            </main>
+            <form className="login-form">
+                <label htmlFor="email">Login:</label>
+                <input type="text" id="email" name="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                <label htmlFor="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" value={senha} onChange={e => setSenha(e.target.value)} required />
+                <div className="login-buttons">
+                    <button type="button" onClick={handleLogin}>Realizar Login</button>
+                    <button type="button" onClick={handleClear}>Limpar</button>
+                </div>
+                <div className="login-links">
+                    <a href="/change-password">Trocar Senha</a>
+                    <a href="/register">Cadastrar Cliente</a>
+                </div>
+            </form>
         </div>
     );
 }

@@ -33,6 +33,10 @@ nav ul li {
   margin: 0 10px;
 }
 
+nav ul li a {
+  text-decoration: none;  /* Remove sublinhado padrão dos links no header */
+}
+
 main {
   padding: 20px;
 }
@@ -52,7 +56,7 @@ footer {
   display: flex;
   justify-content: space-between;
   padding: 20px;
-  background-color: #333;
+  background-color: #011B4D;
   color: white;
 }
 
@@ -66,6 +70,36 @@ footer h3 {
   padding-bottom: 5px;
 }
 
+footer p, li {
+  position: relative;
+  padding-bottom: 5px;
+  color: #ffffff;
+  border-bottom: none;  /* Remove qualquer borda inferior existente */
+  text-decoration: none;  /* Remove qualquer sublinhado de texto */
+}
+
+footer p a, li a {
+  text-decoration: none;  /* Remove sublinhado padrão dos links */
+  color: inherit;  /* Garante que a cor do link seja igual à do texto */
+}
+
+footer p::after, li::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, white, transparent);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+footer p:hover::after, li:hover::after {
+  opacity: 1;
+}
+
 footer ul {
   list-style: none;
   padding: 0;
@@ -73,9 +107,14 @@ footer ul {
 
 footer ul li {
   margin: 5px 0;
+  color: #ffffff;
 }
 
 footer img {
   max-width: 50px;
   margin: 5px;
+}
+
+p {
+  color: #ffffff;
 }

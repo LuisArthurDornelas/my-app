@@ -1,27 +1,13 @@
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  header img {
-    max-width: 100px;
-    display: block;
-    margin: 0 auto;
-  }
-  
-  header h1 {
-    margin-top: 10px;
-  }
-  
-  nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-  }
-  
-  nav a:hover {
-    text-decoration: underline;
-  }
-  
+header nav a {
+  color: white;
+  text-decoration: none; /* Remove sublinhado estático */
+  margin: 0 15px;
+}
+
+header nav a:hover {
+  text-decoration: none; /* Adiciona sublinhado ao passar o mouse */
+}
+
+a {
+  text-decoration: none;
+}

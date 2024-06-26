@@ -42,10 +42,11 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  form label {
+  label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
+    color: #444
   }
   
   form input, form select, form button {

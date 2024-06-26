@@ -76,8 +76,18 @@ function Solicitacao() {
 
     return (
         <div className="solicitacao-container">
-            <header className="solicitacao-header">
-                <h1>Solicitação de Serviços de TI</h1>
+<header>
+                <img src="/logo.png" alt="Logo da Empresa" />
+                <h1>Bem-vindo à Empresa de TI</h1>
+                <nav>
+                    <ul>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Cadastrar</a></li>
+                        <li><a href="/service-request">Solicitar Serviço</a></li>
+                        <li><a href="/payment-method">Cadastro de Meio de Pagamento</a></li>
+                        <li><a href="/solicitacao" id="solicitacaoLink" style={{ display: 'none' }}>Solicitação de Serviços</a></li>
+                    </ul>
+                </nav>
                 <button className="home-button" onClick={() => navigate('/')}>
                     <FaHome />
                 </button>
