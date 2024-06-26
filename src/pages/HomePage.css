@@ -15,12 +15,15 @@ a:hover {
 }
 
 header {
+  background-color: #011B4D;
+  color: white; /* Para garantir que o texto no header seja branco */
   text-align: center;
   padding: 20px;
 }
 
 header img {
   max-width: 150px;
+  
 }
 
 nav ul {
