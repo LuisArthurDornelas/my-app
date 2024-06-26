@@ -11,7 +11,7 @@ function TrocaSenha() {
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const navigate = useNavigate();
 
-    const handleTrocaSenha = () => {
+    const handleTrocaSenha = async () => {
         if (!email || !validateEmail(email)) {
             alert('Por favor, preencha o login com um e-mail válido.');
             return;
@@ -28,15 +28,18 @@ function TrocaSenha() {
             alert('A nova senha não atende aos requisitos.');
             return;
         }
-        axios.post('/troca-senha', { email, senhaAtual, novaSenha })
-            .then(response => {
-                if (response.data.status === 'success') {
-                    alert('Validação realizada com sucesso');
-                    navigate('/login');
-                } else {
-                    alert(response.data.message);
-                }
-            });
+        try {
+            const response = await axios.post('http://localhost:3001/api/auth/change-password', { email, senhaAtual, novaSenha });
+            if (response.data.status === 'success') {
+                alert('Senha alterada com sucesso');
+                navigate('/login');
+            } else {
+                alert(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error during password change:', error);
+            alert('Erro ao tentar trocar a senha. Verifique suas credenciais.');
+        }
     };
 
     const handleClear = () => {
