@@ -7,7 +7,7 @@ import './ServiceRequestPage.css';
 function Solicitacao() {
     const [servicos, setServicos] = useState([]);
     const [solicitacoes, setSolicitacoes] = useState([]);
-    const [meiosDePagamento, setMeiosDePagamento] = useState([]);
+    const [meiosPagamento, setMeiosPagamento] = useState([]);
     const [servicoSelecionado, setServicoSelecionado] = useState('');
     const [preco, setPreco] = useState('');
     const [prazo, setPrazo] = useState('');
@@ -17,48 +17,52 @@ function Solicitacao() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchServicos = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/api/service-requests/services');
-                console.log('Response from services endpoint:', response.data);
-                if (Array.isArray(response.data)) {
-                    setServicos(response.data);
-                } else {
-                    console.error('Response is not an array:', response.data);
-                    setServicos([]);
-                }
-            } catch (error) {
-                console.error('Error fetching services:', error);
+        fetchDados();
+    }, []);
+
+    const fetchDados = async () => {
+        await fetchServicos();
+        await fetchSolicitacoes();
+        await fetchMeiosPagamento();
+    };
+
+    const fetchServicos = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/service-requests/services');
+            console.log('Response from services endpoint:', response.data);
+            if (Array.isArray(response.data)) {
+                setServicos(response.data);
+            } else {
+                console.error('Response is not an array:', response.data);
                 setServicos([]);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching services:', error);
+            setServicos([]);
+        }
+    };
 
-        const fetchSolicitacoes = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/api/service-requests');
-                console.log('Response from requests endpoint:', response.data);
-                setSolicitacoes(Array.isArray(response.data) ? response.data : []);
-            } catch (error) {
-                console.error('Error fetching requests:', error);
-                setSolicitacoes([]);
-            }
-        };
+    const fetchSolicitacoes = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/service-requests');
+            console.log('Response from requests endpoint:', response.data);
+            setSolicitacoes(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+            console.error('Error fetching requests:', error);
+            setSolicitacoes([]);
+        }
+    };
 
-        const fetchMeiosDePagamento = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/api/payment-methods');
-                console.log('Response from payment methods endpoint:', response.data);
-                setMeiosDePagamento(Array.isArray(response.data) ? response.data : []);
-            } catch (error) {
-                console.error('Error fetching payment methods:', error);
-                setMeiosDePagamento([]);
-            }
-        };
-
-        fetchServicos();
-        fetchSolicitacoes();
-        fetchMeiosDePagamento();
-    }, []);
+    const fetchMeiosPagamento = async () => {
+        try {
+            const response = await axios.get('http://localhost:3001/api/payment-methods');
+            console.log('Response from payment methods endpoint:', response.data);
+            setMeiosPagamento(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+            console.error('Error fetching payment methods:', error);
+            setMeiosPagamento([]);
+        }
+    };
 
     useEffect(() => {
         const atualizarValores = () => {
@@ -68,7 +72,7 @@ function Solicitacao() {
                 setPrazo(servico.prazo);
                 setDataPrevista(calcularDataPrevista(servico.prazo));
 
-                const meiosHabilitados = meiosDePagamento.filter(meio => meio.valorMaximo >= servico.preco);
+                const meiosHabilitados = meiosPagamento.filter(meio => meio.valorMaximo >= servico.preco);
                 setMeiosPagamentoHabilitados(meiosHabilitados);
             } else {
                 setPreco('');
@@ -79,7 +83,7 @@ function Solicitacao() {
         };
 
         atualizarValores();
-    }, [servicoSelecionado, servicos, meiosDePagamento]);
+    }, [servicoSelecionado, servicos]);
 
     const calcularDataPrevista = (prazo) => {
         const dataAtual = new Date();
@@ -88,21 +92,13 @@ function Solicitacao() {
     };
 
     const handleSolicitacao = async () => {
-        const clienteId = localStorage.getItem('clienteId');
-        const servico = servicos.find(servico => servico.nome === servicoSelecionado);
-
-        if (!clienteId || !servico) {
-            alert('Erro ao identificar cliente ou serviço selecionado.');
-            return;
-        }
-
         const novaSolicitacao = {
-            clienteId: parseInt(clienteId, 10),
-            servicoId: servico.id,
+            clienteId: localStorage.getItem('clienteId'), // Obtém o clienteId do localStorage
+            servicoId: servicos.find(servico => servico.nome === servicoSelecionado).id,
             dataPedido: new Date().toISOString().split('T')[0],
             status: 'Em Elaboração',
             dataPrevista: dataPrevista,
-            meioPagamentoSigla: meiosDePagamento.find(meio => meio.nome === meioPagamentoSelecionado).sigla
+            meioPagamentoSigla: meiosPagamento.find(meio => meio.nome === meioPagamentoSelecionado).sigla
         };
 
         try {
@@ -168,6 +164,7 @@ function Solicitacao() {
                             <option key={servico.id} value={servico.nome}>{servico.nome}</option>
                         ))}
                     </select>
+                    <button onClick={fetchDados}>Atualizar Lista</button>
                     <p>Preço: {preco}</p>
                     <p>Prazo: {prazo} dias</p>
                     <p>Data Prevista de Atendimento: {dataPrevista}</p>
@@ -198,24 +195,21 @@ function Solicitacao() {
                             </tr>
                         </thead>
                         <tbody>
-                            {solicitacoes.map((solicitacao, index) => {
-                                const servico = servicos.find(s => s.id === solicitacao.servicoId);
-                                return (
-                                    <tr key={index}>
-                                        <td>{solicitacao.dataPedido}</td>
-                                        <td>{solicitacao.id}</td>
-                                        <td>{servico ? servico.nome : 'Desconhecido'}</td>
-                                        <td>{solicitacao.status}</td>
-                                        <td>{servico ? servico.preco : 'Desconhecido'}</td>
-                                        <td>{servico ? servico.prazo : 'Desconhecido'}</td>
-                                        <td>{solicitacao.dataPrevista}</td>
-                                        <td>{solicitacao.meioPagamentoSigla}</td>
-                                        <td>
-                                            <button onClick={() => handleExcluir(solicitacao.id)}>Excluir</button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {solicitacoes.map((solicitacao, index) => (
+                                <tr key={index}>
+                                    <td>{solicitacao.dataPedido}</td>
+                                    <td>{solicitacao.id}</td>
+                                    <td>{servicos.find(servico => servico.id === solicitacao.servicoId)?.nome || 'N/A'}</td>
+                                    <td>{solicitacao.status}</td>
+                                    <td>{servicos.find(servico => servico.id === solicitacao.servicoId)?.preco || 'N/A'}</td>
+                                    <td>{servicos.find(servico => servico.id === solicitacao.servicoId)?.prazo || 'N/A'}</td>
+                                    <td>{solicitacao.dataPrevista}</td>
+                                    <td>{solicitacao.meioPagamentoSigla}</td>
+                                    <td>
+                                        <button onClick={() => handleExcluir(solicitacao.id)}>Excluir</button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </section>
