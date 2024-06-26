@@ -9,7 +9,9 @@ function Login() {
     const [senha, setSenha] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
         if (!email || !validateEmail(email)) {
             alert('Por favor, preencha o login com um e-mail válido.');
             return;
@@ -18,15 +20,18 @@ function Login() {
             alert('Por favor, preencha a senha.');
             return;
         }
-        axios.post('/auth', { email, senha })
-            .then(response => {
-                if (response.data.status === 'success') {
-                    alert('Validação realizada com sucesso');
-                    navigate('/');
-                } else {
-                    alert(response.data.message);
-                }
-            });
+        try {
+            const response = await axios.post('http://localhost:3001/api/auth/login', { login: email, senha });
+            if (response.data.status === 'success') {
+                alert('Validação realizada com sucesso');
+                navigate('/');
+            } else {
+                alert(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('Erro ao tentar fazer login. Verifique suas credenciais.');
+        }
     };
 
     const handleClear = () => {
@@ -44,13 +49,13 @@ function Login() {
                     <FaHome />
                 </button>
             </header>
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleLogin}>
                 <label htmlFor="email">Login:</label>
                 <input type="text" id="email" name="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 <label htmlFor="senha">Senha:</label>
                 <input type="password" id="senha" name="senha" value={senha} onChange={e => setSenha(e.target.value)} required />
                 <div className="login-buttons">
-                    <button type="button" onClick={handleLogin}>Realizar Login</button>
+                    <button type="submit">Realizar Login</button>
                     <button type="button" onClick={handleClear}>Limpar</button>
                 </div>
                 <div className="login-links">
