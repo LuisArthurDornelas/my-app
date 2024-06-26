@@ -57,7 +57,7 @@ function Solicitacao() {
         try {
             const response = await axios.get('http://localhost:3001/api/payment-methods');
             console.log('Response from payment methods endpoint:', response.data);
-            setMeiosPagamento(Array.isArray(response.data) ? response.data : []);
+            setMeiosPagamento(Array.isArray(response.data) ? response.data : response.data.toArray());
         } catch (error) {
             console.error('Error fetching payment methods:', error);
             setMeiosPagamento([]);

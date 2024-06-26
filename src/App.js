@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import ServiceRequestPage from './pages/ServiceRequestPage';
 import PaymentMethodPage from './pages/PaymentMethodPage';
+import AddServicePage from './pages/AddServicePage';
 import './index.css';
 
 const App = () => (
@@ -18,6 +19,7 @@ const App = () => (
       <Route path="/change-password" element={<ChangePasswordPage />} />
       <Route path="/service-request" element={<ServiceRequestPage />} />
       <Route path="/payment-method" element={<PaymentMethodPage />} />
+      <Route path="/add-service" element={<AddServicePage />} />
     </Routes>
   </Router>
 );

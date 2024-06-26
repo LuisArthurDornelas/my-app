@@ -1,0 +1,48 @@
+.add-service-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.add-service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.add-service-main {
+    width: 100%;
+    max-width: 600px;
+}
+
+.service-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-form label {
+    margin-bottom: 5px;
+}
+
+.service-form input {
+    margin-bottom: 15px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.service-form button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.service-form button:hover {
+    background-color: #0056b3;
+}
