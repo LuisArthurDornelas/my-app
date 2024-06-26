@@ -55,8 +55,18 @@ function CadastroMeioPagamento() {
 
     return (
         <div className="add-payment-method-container">
-            <header className="add-payment-method-header">
-                <h1>Adicionar Meio de Pagamento</h1>
+            <header>
+                <img src="/logo.png" alt="Logo da Empresa" />
+                <h1>Cadastro de Meio de Pagamento</h1>
+                <nav>
+                    <ul>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Cadastrar</a></li>
+                        <li><a href="/service-request">Solicitar Serviço</a></li>
+                        <li><a href="/add-service">Cadastro de Serviço</a></li>
+                        <li><a href="/solicitacao" id="solicitacaoLink" style={{ display: 'none' }}>Solicitação de Serviços</a></li>
+                    </ul>
+                </nav>
                 <button className="home-button" onClick={() => navigate('/')}>
                     <FaHome />
                 </button>

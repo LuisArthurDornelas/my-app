@@ -11,6 +11,7 @@ const Header = () => (
         <Link to="/register">Cadastrar Cliente</Link>
         <Link to="/service-request">Solicitar Serviço</Link>
         <Link to="/payment-method">Cadastro de Meio de Pagamento</Link>
+        <Link to="/add-service">Cadastro de Serviço</Link>
       </nav>
     </header>
   </div>

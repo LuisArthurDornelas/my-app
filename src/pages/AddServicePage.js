@@ -36,8 +36,18 @@ function AddServicePage() {
 
     return (
         <div className="add-service-container">
-            <header className="add-service-header">
-                <h1>Adicionar Serviço de TI</h1>
+            <header>
+                <img src="/logo.png" alt="Logo da Empresa" />
+                <h1>Cadastro de Serviço</h1>
+                <nav>
+                    <ul>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Cadastrar</a></li>
+                        <li><a href="/service-request">Solicitar Serviço</a></li>
+                        <li><a href="/payment-method">Cadastro de Meio de Pagamento</a></li>
+                        <li><a href="/solicitacao" id="solicitacaoLink" style={{ display: 'none' }}>Solicitação de Serviços</a></li>
+                    </ul>
+                </nav>
                 <button className="home-button" onClick={() => navigate('/')}>
                     <FaHome />
                 </button>

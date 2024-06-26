@@ -136,13 +136,13 @@ function Solicitacao() {
         <div className="solicitacao-container">
             <header>
                 <img src="/logo.png" alt="Logo da Empresa" />
-                <h1>Bem-vindo à Empresa de TI</h1>
+                <h1>Cadastro de de serviço</h1>
                 <nav>
                     <ul>
                         <li><a href="/login">Login</a></li>
                         <li><a href="/register">Cadastrar</a></li>
-                        <li><a href="/service-request">Solicitar Serviço</a></li>
                         <li><a href="/payment-method">Cadastro de Meio de Pagamento</a></li>
+                        <li><a href="/add-service">Cadastro de Serviço</a></li>
                         <li><a href="/solicitacao" id="solicitacaoLink" style={{ display: 'none' }}>Solicitação de Serviços</a></li>
                     </ul>
                 </nav>

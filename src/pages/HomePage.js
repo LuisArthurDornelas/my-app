@@ -14,6 +14,8 @@ function Home() {
                         <li><a href="/service-request">Solicitar Serviço</a></li>
                         <li><a href="/payment-method">Cadastro de Meio de Pagamento</a></li>
                         <li><a href="/solicitacao" id="solicitacaoLink" style={{ display: 'none' }}>Solicitação de Serviços</a></li>
+                        <li><a href="/add-service">Cadastro de Serviço</a></li>
+                        
                     </ul>
                 </nav>
             </header>
