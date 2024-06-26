@@ -23,6 +23,7 @@ function Login() {
         try {
             const response = await axios.post('http://localhost:3001/api/auth/login', { login: email, senha });
             if (response.data.status === 'success') {
+                localStorage.setItem('clienteId', response.data.id);
                 alert('Validação realizada com sucesso');
                 navigate('/');
             } else {

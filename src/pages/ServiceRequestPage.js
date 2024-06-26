@@ -20,7 +20,7 @@ function Solicitacao() {
         const fetchServicos = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/api/service-requests/services');
-                console.log('Response from services endpoint:', response.data); // Log the data
+                console.log('Response from services endpoint:', response.data);
                 if (Array.isArray(response.data)) {
                     setServicos(response.data);
                 } else {
@@ -36,7 +36,7 @@ function Solicitacao() {
         const fetchSolicitacoes = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/api/service-requests');
-                console.log('Response from requests endpoint:', response.data); // Log the data
+                console.log('Response from requests endpoint:', response.data);
                 setSolicitacoes(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error('Error fetching requests:', error);
@@ -47,13 +47,8 @@ function Solicitacao() {
         const fetchMeiosDePagamento = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/api/payment-methods');
-                console.log('Response from payment methods endpoint:', response.data); // Log the data
-                if (Array.isArray(response.data)) {
-                    setMeiosDePagamento(response.data);
-                } else {
-                    console.error('Response is not an array:', response.data);
-                    setMeiosDePagamento([]);
-                }
+                console.log('Response from payment methods endpoint:', response.data);
+                setMeiosDePagamento(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error('Error fetching payment methods:', error);
                 setMeiosDePagamento([]);
@@ -93,13 +88,21 @@ function Solicitacao() {
     };
 
     const handleSolicitacao = async () => {
+        const clienteId = localStorage.getItem('clienteId');
+        const servico = servicos.find(servico => servico.nome === servicoSelecionado);
+
+        if (!clienteId || !servico) {
+            alert('Erro ao identificar cliente ou serviço selecionado.');
+            return;
+        }
+
         const novaSolicitacao = {
-            clienteId: 1, // Substitua pelo ID do cliente real
-            servicoId: servicos.find(servico => servico.nome === servicoSelecionado).id,
+            clienteId: parseInt(clienteId, 10),
+            servicoId: servico.id,
             dataPedido: new Date().toISOString().split('T')[0],
             status: 'Em Elaboração',
             dataPrevista: dataPrevista,
-            meioPagamentoSigla: meioPagamentoSelecionado
+            meioPagamentoSigla: meiosDePagamento.find(meio => meio.nome === meioPagamentoSelecionado).sigla
         };
 
         try {
@@ -171,8 +174,8 @@ function Solicitacao() {
                     <label htmlFor="meio-pagamento">Meio de Pagamento:</label>
                     <select id="meio-pagamento" value={meioPagamentoSelecionado} onChange={e => setMeioPagamentoSelecionado(e.target.value)}>
                         <option value="">Selecione um meio de pagamento</option>
-                        {meiosDePagamento.map(meio => (
-                            <option key={meio.id} value={meio.nome}>{meio.nome}</option>
+                        {meiosPagamentoHabilitados.map(meio => (
+                            <option key={meio.sigla} value={meio.nome}>{meio.nome}</option>
                         ))}
                     </select>
                     <p>Status: Em Elaboração</p>
@@ -195,21 +198,24 @@ function Solicitacao() {
                             </tr>
                         </thead>
                         <tbody>
-                            {solicitacoes.map((solicitacao, index) => (
-                                <tr key={index}>
-                                    <td>{solicitacao.dataPedido}</td>
-                                    <td>{solicitacao.numero}</td>
-                                    <td>{solicitacao.servico}</td>
-                                    <td>{solicitacao.status}</td>
-                                    <td>{solicitacao.preco}</td>
-                                    <td>{solicitacao.prazo}</td>
-                                    <td>{solicitacao.dataPrevista}</td>
-                                    <td>{solicitacao.meioPagamentoSigla}</td>
-                                    <td>
-                                        <button onClick={() => handleExcluir(solicitacao.id)}>Excluir</button>
-                                    </td>
-                                </tr>
-                            ))}
+                            {solicitacoes.map((solicitacao, index) => {
+                                const servico = servicos.find(s => s.id === solicitacao.servicoId);
+                                return (
+                                    <tr key={index}>
+                                        <td>{solicitacao.dataPedido}</td>
+                                        <td>{solicitacao.id}</td>
+                                        <td>{servico ? servico.nome : 'Desconhecido'}</td>
+                                        <td>{solicitacao.status}</td>
+                                        <td>{servico ? servico.preco : 'Desconhecido'}</td>
+                                        <td>{servico ? servico.prazo : 'Desconhecido'}</td>
+                                        <td>{solicitacao.dataPrevista}</td>
+                                        <td>{solicitacao.meioPagamentoSigla}</td>
+                                        <td>
+                                            <button onClick={() => handleExcluir(solicitacao.id)}>Excluir</button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </section>
